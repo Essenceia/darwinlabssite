@@ -2,12 +2,12 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Site de raph</title>
-    <link>http://essenceia/github.io/darwinlabs/categories/</link>
+    <link>https://essenceia.github.io/darwinlabssite/categories/</link>
     <description>Recent content in Categories on Site de raph</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     
-	<atom:link href="http://essenceia/github.io/darwinlabs/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://essenceia.github.io/darwinlabssite/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
   </channel>
