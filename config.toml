@@ -1,4 +1,4 @@
-baseURL = "http://essenceia/github.io/darwinlabs"
+baseURL = "https://essenceia.github.io/darwinlabssite/"
 languagecode = "en"
 title = "Site de raph"
 theme = "coder-portfolio"
