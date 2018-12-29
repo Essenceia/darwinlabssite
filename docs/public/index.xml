@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title></title>
+    <link>/</link>
+    <description>Recent content on </description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Fri, 28 Dec 2018 16:12:44 +0000</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Parfait</title>
+      <link>/blog/parfait/</link>
+      <pubDate>Fri, 28 Dec 2018 16:12:44 +0000</pubDate>
+      
+      <guid>/blog/parfait/</guid>
+      <description>C&amp;rsquo;est un gateaux
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</description>
+    </item>
+    
+    <item>
+      <title>Hello second post</title>
+      <link>/blog/blog_post/</link>
+      <pubDate>Fri, 28 Dec 2018 16:10:41 +0000</pubDate>
+      
+      <guid>/blog/blog_post/</guid>
+      <description>I love markdown, it is amazing !
+  </description>
+    </item>
+    
+    <item>
+      <title>Blog Post 1</title>
+      <link>/blog/my-first-post/</link>
+      <pubDate>Thu, 27 Dec 2018 20:12:14 +0000</pubDate>
+      
+      <guid>/blog/my-first-post/</guid>
+      <description>Hello world This is a first post</description>
+    </item>
+    
+    <item>
+      <title>List of Projects</title>
+      <link>/projects/</link>
+      <pubDate>Thu, 27 Dec 2018 20:12:14 +0000</pubDate>
+      
+      <guid>/projects/</guid>
+      <description>This is a short list of my major projects over the recent years. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</description>
+    </item>
+    
+    <item>
+      <title>About Me</title>
+      <link>/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/about/</guid>
+      <description>This theme is created based on hugo-coder. I made it possible to tell yourself more by my change. Please see &amp;ldquo;FeaturesOfCoderPortfolio&amp;rdquo; in the post about the change. Regarding other demo contents, it is hugo-coder&amp;rsquo;s thing. Have questions or suggestions? Feel free to open an issue on GitHub or ask me on Twitter.
+Hugo is a static site engine written in Go.
+It makes use of a variety of open source projects including:</description>
+    </item>
+    
+  </channel>
+</rss>
