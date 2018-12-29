@@ -1,5 +1,5 @@
 +++ 
-draft = true
+draft = false
 date = 2018-12-28T18:46:01Z
 title = "Writing makefiles for micro kernels"
 slug = "kernel_makefile"

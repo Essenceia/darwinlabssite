@@ -11,6 +11,25 @@
   <component name="ChangeListManager">
     <list default="true" id="5d5b8b1f-2175-4233-99a1-85f148388faf" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change beforePath="$PROJECT_DIR$/config.toml" afterPath="$PROJECT_DIR$/config.toml" />
+      <change beforePath="$PROJECT_DIR$/docs/404.html" afterPath="$PROJECT_DIR$/docs/404.html" />
+      <change beforePath="$PROJECT_DIR$/docs/about/index.html" afterPath="$PROJECT_DIR$/docs/about/index.html" />
+      <change beforePath="$PROJECT_DIR$/docs/blog/blog_post/index.html" afterPath="$PROJECT_DIR$/docs/blog/blog_post/index.html" />
+      <change beforePath="$PROJECT_DIR$/docs/blog/index.html" afterPath="$PROJECT_DIR$/docs/blog/index.html" />
+      <change beforePath="$PROJECT_DIR$/docs/blog/index.xml" afterPath="$PROJECT_DIR$/docs/blog/index.xml" />
+      <change beforePath="$PROJECT_DIR$/docs/blog/my-first-post/index.html" afterPath="$PROJECT_DIR$/docs/blog/my-first-post/index.html" />
+      <change beforePath="$PROJECT_DIR$/docs/blog/page/1/index.html" afterPath="$PROJECT_DIR$/docs/blog/page/1/index.html" />
+      <change beforePath="$PROJECT_DIR$/docs/blog/parfait/index.html" afterPath="$PROJECT_DIR$/docs/blog/parfait/index.html" />
+      <change beforePath="$PROJECT_DIR$/docs/categories/index.html" afterPath="$PROJECT_DIR$/docs/categories/index.html" />
+      <change beforePath="$PROJECT_DIR$/docs/categories/index.xml" afterPath="$PROJECT_DIR$/docs/categories/index.xml" />
+      <change beforePath="$PROJECT_DIR$/docs/categories/page/1/index.html" afterPath="$PROJECT_DIR$/docs/categories/page/1/index.html" />
+      <change beforePath="$PROJECT_DIR$/docs/index.html" afterPath="$PROJECT_DIR$/docs/index.html" />
+      <change beforePath="$PROJECT_DIR$/docs/index.xml" afterPath="$PROJECT_DIR$/docs/index.xml" />
+      <change beforePath="$PROJECT_DIR$/docs/projects/index.html" afterPath="$PROJECT_DIR$/docs/projects/index.html" />
+      <change beforePath="$PROJECT_DIR$/docs/sitemap.xml" afterPath="$PROJECT_DIR$/docs/sitemap.xml" />
+      <change beforePath="$PROJECT_DIR$/docs/tags/index.html" afterPath="$PROJECT_DIR$/docs/tags/index.html" />
+      <change beforePath="$PROJECT_DIR$/docs/tags/index.xml" afterPath="$PROJECT_DIR$/docs/tags/index.xml" />
+      <change beforePath="$PROJECT_DIR$/docs/tags/page/1/index.html" afterPath="$PROJECT_DIR$/docs/tags/page/1/index.html" />
       <change beforePath="$PROJECT_DIR$/themes/coder-portfolio" afterPath="$PROJECT_DIR$/themes/coder-portfolio" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
@@ -81,8 +100,8 @@
       <file leaf-file-name="config.toml" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/config.toml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="45">
-              <caret line="3" column="25" lean-forward="false" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="25" />
+            <state relative-caret-position="0">
+              <caret line="0" column="7" lean-forward="false" selection-start-line="0" selection-start-column="7" selection-end-line="0" selection-end-column="7" />
               <folding />
             </state>
           </provider>
@@ -300,12 +319,12 @@
       <workItem from="1545947816315" duration="23000" />
       <workItem from="1545947854764" duration="1692000" />
       <workItem from="1545998159426" duration="17927000" />
-      <workItem from="1546085756569" duration="1876000" />
+      <workItem from="1546085756569" duration="1928000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="21518000" />
+    <option name="totallyTimeSpent" value="21570000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -789,8 +808,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/config.toml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="45">
-          <caret line="3" column="25" lean-forward="false" selection-start-line="3" selection-start-column="25" selection-end-line="3" selection-end-column="25" />
+        <state relative-caret-position="0">
+          <caret line="0" column="7" lean-forward="false" selection-start-line="0" selection-start-column="7" selection-end-line="0" selection-end-column="7" />
           <folding />
         </state>
       </provider>
