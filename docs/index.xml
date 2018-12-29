@@ -6,10 +6,21 @@
     <description>Recent content on Site de raph</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Fri, 28 Dec 2018 16:12:44 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 28 Dec 2018 18:46:01 +0000</lastBuildDate>
     
 	<atom:link href="https://essenceia.github.io/darwinlabssite/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Writing makefiles for micro kernels</title>
+      <link>https://essenceia.github.io/darwinlabssite/blog/kernel_makefile/</link>
+      <pubDate>Fri, 28 Dec 2018 18:46:01 +0000</pubDate>
+      
+      <guid>https://essenceia.github.io/darwinlabssite/blog/kernel_makefile/</guid>
+      <description>This makefile contains the base for building tracer.
+$ make clean $ make upload Project overview Tracer&amp;rsquo;s component are the following :
+ kernel : the standard operationnal base, in charge of managing shared ressources. These resources can be hardware (processor, coprocessors, peripheral, memory, etc&amp;hellip;) or software (files, shared mem, interfaces, etc&amp;hellip;). modules : the variable operationnal base, executing at kernel privilege level, and taking advantage of the kernel&amp;rsquo;s capabilities.</description>
+    </item>
     
     <item>
       <title>Parfait</title>

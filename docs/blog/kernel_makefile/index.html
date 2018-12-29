@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta name="author" content="Raphael Outhier">
+    <meta name="description" content="https://essenceia.github.io/darwinlabssite/">
+    <meta name="keywords" content="blog,developer,personal,C,embedded,tracer,microkernel">
+    
+    <meta property="og:site_name" content="Site de raph">
+    <meta property="og:title" content="
+  Writing makefiles for micro kernels - Site de raph
+">
+    <meta property="og:description" content="">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://essenceia.github.io/darwinlabssite/blog/kernel_makefile/">
+    <meta property="og:image" content="https://essenceia.github.io/darwinlabssite/images/profile.jpg">
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:site" content="https://essenceia.github.io/darwinlabssite/blog/kernel_makefile/">
+    <meta name="twitter:image" content="https://essenceia.github.io/darwinlabssite/images/profile.jpg">
+
+    <base href="https://essenceia.github.io/darwinlabssite/">
+    <title>
+  Writing makefiles for micro kernels - Site de raph
+</title>
+
+    <link rel="canonical" href="https://essenceia.github.io/darwinlabssite/blog/kernel_makefile/">
+    
+    <link  rel="stylesheet" href="https://fonts.googleapis.com/css?family=Fira+Mono:400,700">
+    <link rel="stylesheet" href="//cdn.rawgit.com/necolas/normalize.css/master/normalize.css">
+    <link rel="stylesheet" href="https://essenceia.github.io/darwinlabssite/css/style.min.css">
+
+    
+
+    
+
+    <link rel="icon" type="image/png" href="https://essenceia.github.io/images/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="https://essenceia.github.io/images/favicon-16x16.png" sizes="16x16">
+
+    
+
+    <meta name="generator" content="Hugo 0.53" />
+  </head>
+
+  <body class="">
+    <main class="wrapper">
+      <nav class="navigation">
+  <section class="container">
+    <a class="navigation-title" href="/darwinlabssite/">Site de raph</a>
+    <input type="checkbox" id="menu-control"/>
+    <label class="menu-mobile  float-right " for="menu-control">
+      <span class="btn-mobile  float-right ">&#9776;</span>
+      <ul class="navigation-list">
+        
+          
+            <li class="navigation-item  align-center ">
+              <a class="navigation-link" href="https://essenceia.github.io/darwinlabssite/blog">Blog</a>
+            </li>
+          
+            <li class="navigation-item  align-center ">
+              <a class="navigation-link" href="https://essenceia.github.io/darwinlabssite/projects">Projects</a>
+            </li>
+          
+            <li class="navigation-item  align-center ">
+              <a class="navigation-link" href="https://essenceia.github.io/darwinlabssite/about">About</a>
+            </li>
+          
+        
+        
+      </ul>
+    </label>
+  </section>
+</nav>
+
+
+      <div class="content">
+        
+  <section class="container page">
+  <article>
+    <header>
+      <h1>Writing makefiles for micro kernels</h1>
+    </header>
+
+    
+
+<p>This makefile contains the base for building tracer.</p>
+<div class="highlight"><pre class="chroma"><code class="language-bash" data-lang="bash">$ make clean
+$ make upload</code></pre></div>
+<h2 id="project-overview">Project overview</h2>
+
+<p>Tracer&rsquo;s component are the following :</p>
+
+<ul>
+<li><code>kernel</code> : the standard operationnal base, in charge of managing shared ressources.
+These resources can be hardware (processor, coprocessors, peripheral, memory, etc&hellip;) or software
+(files, shared mem, interfaces, etc&hellip;).</li>
+<li><code>modules</code> : the variable operationnal base, executing at kernel privilege level, and taking advantage of
+the kernel&rsquo;s capabilities. Modules can be hardware dependant code, (peripheral drivers), code that must
+use abstracted hardware capabilities (servo controller).</li>
+<li><code>apps</code> : processes, executing at low privilege, without access to kernel capabilities.</li>
+<li><code>stdlib</code> : a set of standard functions, that can be used by all components.
+<br /></li>
+</ul>
+
+<h2 id="building">Building</h2>
+
+<p>Each component is built using :</p>
+
+<ul>
+<li>A build folder, unique for each component, where its <code>.elf</code> objects must be generated.</li>
+<li>A set of dependency rules, that make units can populate. Those rules will compile code and store resulting
+objects in the component&rsquo;s build folder.
+<br /></li>
+</ul>
+
+<p>Components are built by successively including different make units. Each one  :</p>
+
+<ul>
+<li>defines make variables, to configurate other make units.</li>
+<li>implements compilation rules, each one being destinated to one component.
+Resulting objects should be generated in its build dir.</li>
+<li>add each rule to the appropriate component&rsquo;s list.
+<br /></li>
+</ul>
+
+<p>Five make units are included. In the following order :</p>
+
+<ul>
+<li><code>hard</code> : contains standard components hardware dependent code. Its aim is to provide the most complete standard
+if for the whole projects. Non standard components (applications and projects mainly) are free to
+include hardware specific code.
+It configures the kernel, adds kernel rules to generate the kernel&rsquo;s hardware dependent parts, adds
+device driver modules, and generate hardware code for the standard lib (ex for math).</li>
+<li><code>kernel</code> : builds the kernel&rsquo;s hardware independent part. Only has effect on the kernel component.</li>
+<li><code>dmz</code> : contains utilities that are used by the kernel and by the stdlib. All source files in this make unit
+are compiled twice, once for the kernel, and once for the stdlib.</li>
+<li><code>std</code> : contains the standard lib&rsquo;s hardware independent part. Only has an effect on stdlib component.</li>
+<li><code>project</code> : generates application code, by creating and adding rules for the app and module component.</li>
+</ul>
+
+<p>example : kernel Makefile</p>
+<div class="highlight"><pre class="chroma"><code class="language-makefile" data-lang="makefile"><span class="c">#------------------------------------------- Components configuration flags --------------------------------------------
+</span><span class="c"></span>
+<span class="c">#Add the exception stacks size requirements;
+</span><span class="c"></span><span class="nv">KFLAGS</span> <span class="o">+=</span> -DKEX_STACK_SIZE<span class="o">=</span><span class="k">$(</span>KEX_STACK_SIZE<span class="k">)</span>
+
+<span class="c">#Add first process hardware requirements;
+</span><span class="c"></span><span class="nv">KFLAGS</span> <span class="o">+=</span> -DKFP_RAM_SIZE<span class="o">=</span><span class="k">$(</span>KFP_RAM_SIZE<span class="k">)</span>
+<span class="nv">KFLAGS</span> <span class="o">+=</span> -DKFP_STACK_SIZE<span class="o">=</span><span class="k">$(</span>KFP_STACK_SIZE<span class="k">)</span>
+<span class="nv">KFLAGS</span> <span class="o">+=</span> -DKFP_ACTIVITY_TIME<span class="o">=</span><span class="k">$(</span>KFP_ACTIVITY_TIME<span class="k">)</span>
+
+<span class="nv">KFLAGS</span> <span class="o">+=</span> -DKDM_SIZE<span class="o">=</span><span class="k">$(</span>KDM_SIZE<span class="k">)</span>
+
+<span class="nv">KFLAGS</span> <span class="o">+=</span> -DNB_COPROCESSORS<span class="o">=</span><span class="k">$(</span>KERNEL_NB_COPROCESSORS<span class="k">)</span>
+
+
+<span class="c">#-------------------------------------------------- Compilation rules --------------------------------------------------
+</span><span class="c"></span>
+<span class="nv">KS</span> <span class="o">:=</span> src/kernel
+<span class="nv">KR_BL</span> <span class="o">:=</span> build/krnl
+
+<span class="nf">kernel </span><span class="o">:</span>
+
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/fault.o 		-c <span class="k">$(</span>KS<span class="k">)</span>/async/fault.c
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/except.o 		-c <span class="k">$(</span>KS<span class="k">)</span>/async/except.c
+
+
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/clock.o 		-c <span class="k">$(</span>KS<span class="k">)</span>/clock/clock.c
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/sysclock.o 	-c <span class="k">$(</span>KS<span class="k">)</span>/clock/sysclock.c
+
+
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/probe.o 		-c <span class="k">$(</span>KS<span class="k">)</span>/debug/probe.c
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/debug.o 		-c <span class="k">$(</span>KS<span class="k">)</span>/debug/debug.c
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/printk.o 			-c <span class="k">$(</span>KS<span class="k">)</span>/debug/printk.c
+
+
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/inode.o 		-c <span class="k">$(</span>KS<span class="k">)</span>/fs/inode.c
+
+
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/heap.o 		-c <span class="k">$(</span>KS<span class="k">)</span>/mem/heap.c
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/kdmem.o 		-c <span class="k">$(</span>KS<span class="k">)</span>/mem/kdmem.c
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/ram.o 			-c <span class="k">$(</span>KS<span class="k">)</span>/mem/ram.c
+
+
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/mod.o 			-c <span class="k">$(</span>KS<span class="k">)</span>/mod/mod.c
+
+
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/apps.o 			-c <span class="k">$(</span>KS<span class="k">)</span>/run/apps.c
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/pmem.o 			-c <span class="k">$(</span>KS<span class="k">)</span>/run/pmem.c
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/coproc.o 		-c <span class="k">$(</span>KS<span class="k">)</span>/run/coproc.c
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/proc.o 		-c <span class="k">$(</span>KS<span class="k">)</span>/run/proc.c
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/sched.o 		-c <span class="k">$(</span>KS<span class="k">)</span>/run/sched.c
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/ksyscall.o 	-c <span class="k">$(</span>KS<span class="k">)</span>/ksyscall.c
+
+
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/nlist.o 		-c <span class="k">$(</span>KS<span class="k">)</span>/struct/nlist.c
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/shared_fifo.o 	-c <span class="k">$(</span>KS<span class="k">)</span>/struct/shared_fifo.c
+
+
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/kinit.o 		-c <span class="k">$(</span>KS<span class="k">)</span>/kinit.c
+	@<span class="k">$(</span>KCC<span class="k">)</span> -o <span class="k">$(</span>KR_BL<span class="k">)</span>/panic.o 		-c <span class="k">$(</span>KS<span class="k">)</span>/panic.c
+
+
+
+<span class="c">#-------------------------------------------------- Components Config --------------------------------------------------
+</span><span class="c"></span>
+<span class="nv">KRNL_RULES</span> <span class="o">+=</span> kernel
+</code></pre></div>
+<h3 id="linking-barriers">Linking barriers</h3>
+
+<p>As the executable is entirely static, all parts (kernel, modules, stdlib and apps), are linked together to form the
+final executable.</p>
+
+<p>This raise a <strong>security problem</strong>. Indeed, modules and kernel run on a high privilleged level, and
+stdlib and applications run on a lower privilege level. Their compilation and linking should be separated.</p>
+
+<p>Moreover, modules and (resp) apps use public symbols of kernel and (resp) stdlib, but the opposite should never
+happen. By no means the kernel or the stdlib should use a function of a module or an application.
+There need to be a mechanism to restrict the linking process to only compatible parts of the code, but standard
+toolchains do not provide such mechanism.</p>
+
+<p>To achieve this, we will mangle (prefix) defined symbols of each object that would form the executable, and propagate
+changes only to object that are authorised to be linked with it.</p>
+<div class="highlight"><pre class="chroma"><code class="language-makefile" data-lang="makefile"><span class="c">#ELF mangle : translation_file,object_file
+</span><span class="c"></span><span class="nv">elf_mangle</span> <span class="o">=</span> <span class="k">$(</span>OBJCOPY<span class="k">)</span> --redefine-syms<span class="o">=</span><span class="k">$(</span><span class="m">1</span><span class="k">)</span> <span class="k">$(</span><span class="m">2</span><span class="k">)</span>
+</code></pre></div>
+<p>For example, we will mangle all public defined symbols of the kernel, and propagate this mangling to modules only.
+That way, if the stdlib, or an application used a kernel symbol, during the final linking, it will query a symbol
+that will have been mangled in the kernel object file but not in its object file. An undefined reference will exist.
+This mechanism is only a safeguard, and doesn&rsquo;t fully prevent forbidden linking, as pre-using a mangled name
+is sufficient to overpass it.</p>
+
+<p>With such mechanisms, kernel and stdlib are stand_alone, and modules (resp applications) can only use their
+symbols, and those of the kernel (resp stdlib).</p>
+
+<blockquote>
+<p>The only exception to this rule concerns two functions of the standard library, run_exec and run_exit, that are used by the kernel at a process&rsquo;s entry and exit points.</p>
+</blockquote>
+<div class="highlight"><pre class="chroma"><code class="language-makefile" data-lang="makefile"><span class="c">#The standard lib is different. We must archive all objetcs, generate the translation table, and mangle std symbols;
+</span><span class="c"></span><span class="nf">stdl_pack </span><span class="o">:</span> <span class="k">$(</span><span class="nv">STDL_RULES</span><span class="k">)</span>
+
+<span class="c">#Archive the stdandard library;
+</span><span class="c"></span>	@<span class="k">$(</span>AR<span class="k">)</span> cr build/stdlib.a <span class="k">$(</span>STDL_O<span class="k">)</span>
+
+<span class="c">#Generte the stdlib translation table;
+</span><span class="c"></span>	@<span class="k">$(</span>call elf_translate,<span class="k">$(</span>STDL_MGL_PREFIX<span class="k">)</span>,build/stdlib.a,build/stdl_trsl<span class="k">)</span>
+
+<span class="c">#Mangle stdlib&#39;s symbols in the stdlib archive;
+</span><span class="c"></span><span class="err">@</span><span class="k">$(</span><span class="nv">call</span> <span class="nv">elf_mangle</span>,<span class="nv">build</span>/<span class="nv">stdl_trsl</span>,<span class="nv">build</span>/<span class="nv">stdlib</span>.<span class="nv">a</span><span class="k">)</span>
+</code></pre></div>
+<p>In opposition to kernel and stdlib that are unique, modules and applications are many, and their amound is not
+defined. To register properly a module, or an application, create a rule that should build your objects,
+and a variable that should contain your object files names.</p>
+
+<p><strong>Both rule and variable must have the same name</strong></p>
+
+<p>The name itself is not important, as soon as it doesn&rsquo;t conflict with another rule / variable.</p>
+
+<p>Finally, to include your module in the make process, add the rule / variable name in the appropriate rules
+list. This list can be MODS_RULES or APPS_RULES.</p>
+
+  </article>
+</section>
+
+
+      </div>
+      
+        <footer class="footer">
+  <section class="container">
+    
+    
+      <p>Enter a text here.</p>
+    
+     
+
+  </section>
+</footer>
+<div class="fixed-bar">
+  <section class="container">
+    
+      <p id="privateTriggerText">Want to know more about me ?→<a id="privateTrigger" href="about">Click!</a></p>
+    
+    
+  </section>
+</div>
+
+      
+    </main>
+
+    
+
+  <script src="https://essenceia.github.io/darwinlabssite/js/app.js"></script>
+  
+  </body>
+</html>
